@@ -1,5 +1,5 @@
 import math
-import matplotlib.pyplot as plt
+# import matplotlib.pyplot as plt
 import cmath
 
 
@@ -19,12 +19,11 @@ def b(dlst):
 
 def c(dlst):
     d,m,y = dlst
-    return m + 12*((14/m)/12)-2
+    return m+(12*((14-m)/12))-2
 
 def day(dlst):
     d,m,y = dlst
-    return week[math.floor((d+b(dlst)+ (31*c(dlst)/12))%7)-1]
-
+    return week[math.floor((d+b(dlst)+(31*(c(dlst)/12)))%7)]
 
 ###########################################################################
 # Functions for Problem 2
@@ -120,7 +119,7 @@ def q_(coefficients):
     m,n = c_s(coefficients)
     posx = -m + math.sqrt(-n)
     negx = -m - math.sqrt(-n)
-    return (round(posx, 2), round(negx, 2))
+    return (round(negx, 2), round(posx, 2))
 
 
 ###########################################################################
@@ -160,10 +159,9 @@ def mean_centered(lst):
 def equi(s,d):
     equation = (s[0]-d[0],s[1]-d[1],s[2]-d[2])
     answer = q(equation)
-    if answer[0] > 0:
-        return answer[0]
-    else:
-        return answer[1]
+    answer = (answer[1],answer[0])
+    return answer
+
     
 ###########################################################################
 # Functions for Problem 7
@@ -223,16 +221,27 @@ def sub_strings(str,cnt):
 #INPUT values for annuity
 #OUTPUT deposit amount needed
 def deposit(S,i,n):
-    return -(S/(i*math.pow(1+i,n)-i))
+    return round(S*(i/(math.pow(1+i,n)-1)),2)
 
 
 #INPUT sinking fund values except deposit
 #OUTPUT a list of period, deposit, interest, accrued total fund
 def sinking_fund(final_amt, r, m, y):
+    final_list = []
     i = r/m
     n = m*y
     S = final_amt
     R = deposit(S,i,n)
+
+    tmp = 0
+    final_money = 0
+    while tmp < n:
+        accrued = round(i*final_money,2)
+        final_money += R + accrued
+        temp_list = [tmp, R, accrued, round(final_money,2)]
+        final_list += [temp_list]
+        tmp += 1
+    return final_list
 
 
 
@@ -336,6 +345,7 @@ if __name__ == "__main__":
 
     # print(equi(s,d))
 
+    # print(equi([5,20,-300],[4,10,300]))
     #problem 7
     # br = 0.03
     # dr = 0.0004
@@ -384,10 +394,10 @@ if __name__ == "__main__":
 
 
     #problem 11
-    portfolios =  {'A':{'stock':{'x':(41.45,45),'y':(22.20,1000)}},
-    'B':{'stock':{'x':(33.45,15),'y':(12.20,400)}}}
-    market = {'x':43.00, 'y':22.50}
+    # portfolios =  {'A':{'stock':{'x':(41.45,45),'y':(22.20,1000)}},
+    # 'B':{'stock':{'x':(33.45,15),'y':(12.20,400)}}}
+    # market = {'x':43.00, 'y':22.50}
 
 
-    for name, portfolio in portfolios.items():
-        print(f"{name} {value(portfolio,market)}")
+    # for name, portfolio in portfolios.items():
+    #     print(f"{name} {value(portfolio,market)}")
