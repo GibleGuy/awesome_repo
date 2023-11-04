@@ -1,7 +1,7 @@
 import math
 import random as rn
 import numpy as np
-# import matplotlib.pyplot as plt
+import matplotlib.pyplot as plt
 import os 
 import csv
 
@@ -192,10 +192,8 @@ def std_linear_regression(data):
 # make sure to get rid of the first line that just contains the column names (we don't want that)
 def get_fish_data(path, name):
     with open(path+name) as magic:
-        reading = csv.reader(magic)
-        cow = [x for x in reading]
-        cow = cow[1:]
-        awesome = [[i[0],i[1]] for i in cow]
+        reading = list(csv.reader(magic))
+        awesome = [[i[0],i[1]] for i in reading]
         ages = [int(x[0]) for x in awesome]
         lengths = [float(x[1]) for x in awesome]
         return ages, lengths
@@ -308,7 +306,7 @@ if __name__ == '__main__':
     # print(tiles(n,v,[[i] for i in v]))
     # for i in tiles(n,v,[[i] for i in v]):
     #     print(sum(i), end="")    
-    print(tiles(6, [ 1, 4 ], [ [ 1 ], [ 4 ] ]))
+    # print(tiles(6, [ 1, 4 ], [ [ 1 ], [ 4 ] ]))
 
     #problem 3
     # data = [[5,1,4,1,5],[5,6,2,4],[4,5,1,1],[1,5,10,4,1],[1,1,1,1,1]]
@@ -334,20 +332,20 @@ if __name__ == '__main__':
     # plt.show()
 
     # #problem 5
-    # name = "fish_data.txt"
-    # X,Y = get_fish_data("Assignment6\\", name)
-    # data5 = [[i,j] for i,j in zip(X,Y)]
-    # print(data5)
+    name = "fish_data.txt"
+    X,Y = get_fish_data("Assignment6\\", name)
+    data5 = [[i,j] for i,j in zip(X,Y)]
+    print(data5)
       
-    # plt.plot(X,Y,'ro')
-    # xp = np.linspace(1,14,10)
-    # degree = 3
-    # p3 = make_function(X,Y,degree)
-    # plt.plot(xp,p3(xp),'b')
-    # plt.xlabel("Age (years)")
-    # plt.ylabel("Length (inches)")
-    # plt.title("Rock Bass Otolith")
-    # plt.show()
+    plt.plot(X,Y,'ro')
+    xp = np.linspace(1,14,10)
+    degree = 3
+    p3 = make_function(X,Y,degree)
+    plt.plot(xp,p3(xp),'b')
+    plt.xlabel("Age (years)")
+    plt.ylabel("Length (inches)")
+    plt.title("Rock Bass Otolith")
+    plt.show()
 
     #problem 6
     # data = ["aaaba", "abcba", "abbcde","aaabbbaaaaaac","abcdeffg"]
