@@ -1,7 +1,7 @@
 import math
 import random as rn
 import numpy as np
-import matplotlib.pyplot as plt
+# import matplotlib.pyplot as plt
 import os 
 import csv
 
@@ -70,7 +70,7 @@ def cousins(name1,name2):
 # input n: total space (size), v: tiles and 
 # output all possible patterns where the tiles add exactly to the the space (n)
 def tiles(n, v, lst):
-    lst = [[i] for i in v]
+    # lst = [[i] for i in v]
     for _ in range(n):
         for item in lst:
             if not sum(item) == n:
@@ -80,6 +80,7 @@ def tiles(n, v, lst):
                         lst = lst + [temp]
             if not sum(item) == n:
                 lst.remove(item) 
+    lst.sort(reverse=True)
     return lst
             
     # print(f"{lst} THIS IS THE LIST")
@@ -117,19 +118,21 @@ def tiles(n, v, lst):
     # final.sort(reverse=True)
     # return final
 
-    
-            
-
-        
-    
-
 
 
 #problem 3
 # input: a list of numbers
 # output: a pair containing the sum and boolean vector (see PDF for sample output)
 def max_adjacent(lst):
+     # coollst = [] + lst
+    # for x in coollst:
+    #     if len(x) > 2:
+    #         coollst = coollst + [x[1:]]
+    #     for y in len(x):
+    #         coollst = coollst + [x[0] + x[1]]
     pass
+    #     #idk man I tried
+
 
 
 
@@ -153,24 +156,18 @@ def get_data_1(path, filename):
 #OUTPUT best regression slope m_hat, intercept b_hat, and R_sq
 def std_linear_regression(data):
 
-    xyp, xs, ys, xsq, sst, sse,ysq = 0,0,0,0,0,0,0
+    xyp=xs=ys=xsq=sst=sse=ysq=0
     for i in data:
         x,y = i
-        x,y = int(x),int(y)
-        xyp += (x*y)
+        xyp += x*y
         xs += x
         ys += y
-        xsq += (x**2)
+        xsq += x**2
         ysq += y**2
     sxy = xyp - ((xs*ys)/len(data))
     sxx = xsq - ((xs**2)/len(data))
     m_hat = round(sxy / sxx, 3)
     b_hat = round((ys-(m_hat*xs))/len(data),3)
-    
-    
-    for i in data:
-        
-
     sst = ysq - (ys**2/len(data))
     sse = ysq - (b_hat*ys) - (m_hat*xyp)
     R_sq = round((sst-sse)/sst,3)
@@ -194,14 +191,21 @@ def std_linear_regression(data):
 # CONSTRAINT use csv reader
 # make sure to get rid of the first line that just contains the column names (we don't want that)
 def get_fish_data(path, name):
-    pass
-
+    with open(path+name) as magic:
+        reading = csv.reader(magic)
+        cow = [x for x in reading]
+        cow = cow[1:]
+        awesome = [[i[0],i[1]] for i in cow]
+        ages = [int(x[0]) for x in awesome]
+        lengths = [float(x[1]) for x in awesome]
+        return ages, lengths
 
 #INPUT lists X values, Y values of data and degree of the polynomial
 #RETURN a polynomial of degree three
 def make_function(X,Y,degree):
-    pass
-
+    return np.poly1d(np.polyfit(X,Y,degree))
+    # return np.polyfit(X,Y,degree)
+    
 
 
 #### Problem 6
@@ -209,7 +213,42 @@ def make_function(X,Y,degree):
 #output a list of the longest string that have no more than n distinct symbols
 
 def max_n(str, n):
-    pass    
+    long = []
+    max = 0
+    start = 0
+    totalchar = {}
+    holdlst = []
+    for i in str:
+        if i not in holdlst:
+            holdlst = holdlst + [i]
+
+    if len(holdlst) < n:
+        return [""]
+
+    for end in range(len(str)):
+        char = str[end]
+
+        if char not in totalchar:
+            totalchar[char] = 0
+
+        totalchar[char] += 1
+
+        while len(totalchar) > n:
+            start_char = str[start]
+            totalchar[start_char] -= 1
+            if totalchar[start_char] == 0:
+                del totalchar[start_char]
+            start += 1
+
+        current_length = end - start + 1
+
+        if current_length > max:
+            max = current_length
+            long = [str[start:end+1]]
+        elif current_length == max:
+            long.append(str[start:end+1])
+    long = list(dict.fromkeys(long))    
+    return long
 
 
 
@@ -223,8 +262,9 @@ def simulation(model_parameters, num_trials):
     # print(win(*model_parameters))
 
 
-    b,p,k = model_parameters
-    flip = (np.random.binomial(b,p,num_trials))
+    b,p,m = model_parameters
+    return round(sum(np.random.binomial(1,(1-(((1-p)/p)**b)) / (1-(((1-p)/p)**m)),(num_trials*10)) == 1)/(num_trials*10),2)
+
  
     # for _ in range(num_trials):
     #     run_sim(model_parameters)
@@ -268,6 +308,7 @@ if __name__ == '__main__':
     # print(tiles(n,v,[[i] for i in v]))
     # for i in tiles(n,v,[[i] for i in v]):
     #     print(sum(i), end="")    
+    print(tiles(6, [ 1, 4 ], [ [ 1 ], [ 4 ] ]))
 
     #problem 3
     # data = [[5,1,4,1,5],[5,6,2,4],[4,5,1,1],[1,5,10,4,1],[1,1,1,1,1]]
@@ -276,25 +317,25 @@ if __name__ == '__main__':
 
     #problem 4
 
-    data6 = get_data_1("Assignment6\\", "payrollwins.txt")
-    print(data6)
-    m_hat, b_hat, R_sq  = std_linear_regression(data6)
-    print(m_hat,b_hat,R_sq)
+    # data6 = get_data_1("Assignment6\\", "payrollwins.txt")
+    # print(data6)
+    # m_hat, b_hat, R_sq  = std_linear_regression(data6)
+    # print(m_hat,b_hat,R_sq)
     
     # Comment the code for plotting (and the import of matplotlib up top) before you submit to the Autograder.
     # You can test as much as you want on your system but before the submission - please comment the code for
     # plotting.
-    plt.plot([x for x,_ in data6],[y for _,y in data6],'ro')
-    plt.plot([x for x,_ in data6],[m_hat*x + b_hat for x,_ in data6],'b')
-    plt.xlabel("$M Payroll")
-    plt.ylabel("Season Wins")
-    plt.title(f"Least Squares: m = {m_hat}, b = {b_hat}, R^2 = {R_sq} ")
-    plt.ylabel("Y")
-    plt.show()
+    # plt.plot([x for x,_ in data6],[y for _,y in data6],'ro')
+    # plt.plot([x for x,_ in data6],[m_hat*x + b_hat for x,_ in data6],'b')
+    # plt.xlabel("$M Payroll")
+    # plt.ylabel("Season Wins")
+    # plt.title(f"Least Squares: m = {m_hat}, b = {b_hat}, R^2 = {R_sq} ")
+    # plt.ylabel("Y")
+    # plt.show()
 
     # #problem 5
     # name = "fish_data.txt"
-    # X,Y = get_fish_data("provide path", name)
+    # X,Y = get_fish_data("Assignment6\\", name)
     # data5 = [[i,j] for i,j in zip(X,Y)]
     # print(data5)
       
@@ -318,5 +359,5 @@ if __name__ == '__main__':
     #problem 7
     # model_parameters = (2,.6,4) #starting amount, probablity of win, goal
     # print(simulation(model_parameters,100000))
-    
-    # print()
+
+    print()
