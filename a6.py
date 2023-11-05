@@ -1,7 +1,7 @@
 import math
 import random as rn
 import numpy as np
-import matplotlib.pyplot as plt
+# import matplotlib.pyplot as plt
 import os 
 import csv
 
@@ -82,17 +82,6 @@ def tiles(n, v, lst):
                 lst.remove(item) 
     lst.sort(reverse=True)
     return lst
-            
-    # print(f"{lst} THIS IS THE LIST")
-    # templst = []
-    # for x in lst:
-    #     if sum(x) == n:
-    #         templst = templst + [x]
-    # templst.sort(reverse=True)
-    # finallst = templst
-    # # for j in templst:
-    #     if j not in finallst:
-    #         finallst = finallst + [j]
                 
 
     '''I made a version of this function
@@ -149,13 +138,11 @@ def get_data_1(path, filename):
     with open(path+filename) as magic:
         reading = csv.reader(magic)
         return [[int(i[0]),int(i[1])] for i in reading]
-        
 
 
 #INPUT data points (x0,y0),...,(xn,yn)
 #OUTPUT best regression slope m_hat, intercept b_hat, and R_sq
 def std_linear_regression(data):
-
     xyp=xs=ys=xsq=sst=sse=ysq=0
     for i in data:
         x,y = i
@@ -171,12 +158,6 @@ def std_linear_regression(data):
     sst = ysq - (ys**2/len(data))
     sse = ysq - (b_hat*ys) - (m_hat*xyp)
     R_sq = round((sst-sse)/sst,3)
-    # for i in data:
-    #     x,y = i
-    #     x,y = int(x),int(y)
-    #     sst += (y**2)-((ys**2)/len(data))
-    #     sse += (y**2) - b_hat*ys - m_hat*xyp
-    #     
         
     return m_hat, b_hat, R_sq
 
@@ -192,7 +173,7 @@ def std_linear_regression(data):
 # make sure to get rid of the first line that just contains the column names (we don't want that)
 def get_fish_data(path, name):
     with open(path+name) as magic:
-        reading = list(csv.reader(magic))
+        reading = list(csv.reader(magic))[1:]
         awesome = [[i[0],i[1]] for i in reading]
         ages = [int(x[0]) for x in awesome]
         lengths = [float(x[1]) for x in awesome]
@@ -201,9 +182,7 @@ def get_fish_data(path, name):
 #INPUT lists X values, Y values of data and degree of the polynomial
 #RETURN a polynomial of degree three
 def make_function(X,Y,degree):
-    return np.poly1d(np.polyfit(X,Y,degree))
-    # return np.polyfit(X,Y,degree)
-    
+    return np.poly1d(np.polyfit(X,Y,degree))    
 
 
 #### Problem 6
@@ -255,21 +234,8 @@ def max_n(str, n):
 #input a tuple of model parameters, second parameter is the number of trials
 #output the percent success rounded to two decimal places
 def simulation(model_parameters, num_trials):
-    # def win(b,p,m):
-    #     return (1-math.pow((1-p)/p,b))/(1-math.pow((1-p)/p,m))
-    # print(win(*model_parameters))
-
-
     b,p,m = model_parameters
     return round(sum(np.random.binomial(1,(1-(((1-p)/p)**b)) / (1-(((1-p)/p)**m)),(num_trials*10)) == 1)/(num_trials*10),2)
-
- 
-    # for _ in range(num_trials):
-    #     run_sim(model_parameters)
-
-
-
-
 
 
 if __name__ == '__main__':
@@ -332,20 +298,20 @@ if __name__ == '__main__':
     # plt.show()
 
     # #problem 5
-    name = "fish_data.txt"
-    X,Y = get_fish_data("Assignment6\\", name)
-    data5 = [[i,j] for i,j in zip(X,Y)]
-    print(data5)
+    # name = "fish_data.txt"
+    # X,Y = get_fish_data("Assignment6\\", name)
+    # data5 = [[i,j] for i,j in zip(X,Y)]
+    # print(data5)
       
-    plt.plot(X,Y,'ro')
-    xp = np.linspace(1,14,10)
-    degree = 3
-    p3 = make_function(X,Y,degree)
-    plt.plot(xp,p3(xp),'b')
-    plt.xlabel("Age (years)")
-    plt.ylabel("Length (inches)")
-    plt.title("Rock Bass Otolith")
-    plt.show()
+    # plt.plot(X,Y,'ro')
+    # xp = np.linspace(1,14,10)
+    # degree = 3
+    # p3 = make_function(X,Y,degree)
+    # plt.plot(xp,p3(xp),'b')
+    # plt.xlabel("Age (years)")
+    # plt.ylabel("Length (inches)")
+    # plt.title("Rock Bass Otolith")
+    # plt.show()
 
     #problem 6
     # data = ["aaaba", "abcba", "abbcde","aaabbbaaaaaac","abcdeffg"]
